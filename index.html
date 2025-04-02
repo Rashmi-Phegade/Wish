@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Surprise for Ashish! 🎉</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: black;
+        color: white;
+        font-family: "Arial", sans-serif;
+        text-align: center;
+      }
+      .countdown {
+        font-size: 50px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="countdown" class="countdown">10</div>
+
+    <!-- Audio for Countdown -->
+    <audio id="countdownAudio">
+      <source src="countdown.mp3" type="audio/mpeg" />
+      Your browser does not support the audio tag.
+    </audio>
+
+    <script>
+      let count = 10;
+      const countdownAudio = document.getElementById("countdownAudio");
+
+      function updateCountdown() {
+        document.getElementById("countdown").textContent = count;
+        if (count === 0) {
+          window.location.href = "confession.html";
+        } else {
+          count--;
+          setTimeout(updateCountdown, 1200);
+        }
+      }
+
+      // Function to start countdown and audio automatically
+      function startCountdown() {
+        countdownAudio.volume = 1.0; // Set volume to full
+        countdownAudio
+          .play()
+          .then(() => {
+            updateCountdown(); // Start countdown when audio plays
+          })
+          .catch((err) => {
+            console.log("Autoplay blocked, trying workaround...");
+            document.body.addEventListener(
+              "click",
+              () => {
+                countdownAudio.play();
+                updateCountdown();
+              },
+              { once: true }
+            ); // Ensures it runs only once
+          });
+      }
+
+      // Attempt to start automatically when the page loads
+      window.addEventListener("load", () => {
+        startCountdown();
+      });
+    </script>
+  </body>
+</html>

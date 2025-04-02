@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy Birthday Ashish! 🎉</title>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: black;
+        color: white;
+        font-family: "Arial", sans-serif;
+        text-align: center;
+        overflow: hidden;
+      }
+      h1 {
+        font-size: 50px;
+      }
+      img {
+        width: 300px;
+        border-radius: 10px;
+        margin-top: 20px;
+      }
+      .confetti {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+      .back-button {
+        margin-top: 30px;
+        padding: 10px 20px;
+        font-size: 18px;
+        font-weight: bold;
+        background: red;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+      .back-button:hover {
+        background: darkred;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🎂 Happy Birthday Ashish! 🎉</h1>
+    <img src="birthday-image.jpg" alt="Birthday Celebration" />
+    <canvas class="confetti"></canvas>
+
+    <!-- Birthday Song -->
+    <audio id="birthdaySong" loop>
+      <source src="birthday.mp3" type="audio/mpeg" />
+      Your browser does not support the audio tag.
+    </audio>
+
+    <button class="back-button" onclick="goBack()">⬅ Back to Countdown</button>
+
+    <script>
+      function goBack() {
+        window.location.href = "index.html";
+      }
+
+      // Play the song automatically when the page loads
+      const birthdaySong = document.getElementById("birthdaySong");
+
+      function playSong() {
+        birthdaySong.volume = 1.0; // Full volume
+        birthdaySong.play().catch((err) => {
+          console.log("Autoplay blocked, waiting for user interaction.");
+          document.body.addEventListener(
+            "click",
+            () => {
+              birthdaySong.play();
+            },
+            { once: true }
+          );
+        });
+      }
+
+      window.addEventListener("load", () => {
+        playSong(); // Try to autoplay when the page loads
+      });
+
+      // Confetti Animation
+      const canvas = document.querySelector(".confetti");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const confettiParticles = [];
+      for (let i = 0; i < 200; i++) {
+        confettiParticles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: Math.random() * 6 + 2,
+          d: Math.random() * 10,
+          color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+          tilt: Math.random() * 10 - 5,
+        });
+      }
+
+      function drawConfetti() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        confettiParticles.forEach((p) => {
+          ctx.beginPath();
+          ctx.fillStyle = p.color;
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fill();
+        });
+      }
+
+      function updateConfetti() {
+        confettiParticles.forEach((p) => {
+          p.y += p.d;
+          if (p.y > canvas.height) {
+            p.y = -10;
+          }
+        });
+      }
+
+      function animateConfetti() {
+        drawConfetti();
+        updateConfetti();
+        requestAnimationFrame(animateConfetti);
+      }
+
+      animateConfetti();
+    </script>
+  </body>
+</html>
